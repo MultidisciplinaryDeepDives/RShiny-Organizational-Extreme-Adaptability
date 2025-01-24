@@ -1,4 +1,4 @@
-**Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic**
+## Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic
 
 **Executive Summary**:
 We live in an interconnected world in which nothing exists in isolation or in a vacuum. Shock and recovery from the SARS-CoV-2 pandemic can be observed in firms’ earnings calls and share performance. Insights regarding adaptability (e.g. asynchronous collaboration, acting on foresight with agility, remote/hybrid work) and team-level practice of resilience (e.g. committing to each other and checking on each other’s wellbeing) can hopefully be gained from analyzing changes in the net COVID-related sentiment in their earnings calls—whose presentation can be subdivided into public relations management and actual improvements in operations and/or earnings. The latter of which can be gleaned from their 10k documents. Firm’s improvement/turnaround (in comparison to one’s peers in the same industry) in this context often involves either pre-existing positioning/alignment or repositioning/realignment around products, services, and/or operations. 
