@@ -1,0 +1,117 @@
+---
+title: "Finding Firms with Largest Delta in Net COVID Sentiment"
+output: html_notebook
+---
+
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(corrr)
+library(haven)
+```
+
+
+
+
+Read in data file  
+
+```{r}
+
+firms <- read_dta('../data/firmquarter_2022q1.dta')
+firms 
+
+```
+
+
+Find entries whose COVID Net Sentiment isn't 0
+
+```{r}
+NonZero_Firms <- firms |> 
+      filter(`Covid_Net_Sentiment` != 0) |> 
+      filter(hqcountrycode == 'US') |> 
+      mutate(date_earningscall = dmy(date_earningscall)) 
+      
+NonZero_Firms 
+```
+
+
+Find firms (and their earnings calls) the largest Deltas in their Net COVID Sentiments over time.
+
+```{r}
+
+Min_Max_Net_COVID_Sentiments <- NonZero_Firms |> 
+                                    group_by(company_name) |> 
+                                    mutate(Min_Net_COVID_Sentiment = min(Covid_Net_Sentiment)) |> 
+                                    mutate(Max_Net_COVID_Sentiment = max(Covid_Net_Sentiment)) |> 
+                                    mutate(Delta_Net_COVID_Sentiment = Max_Net_COVID_Sentiment - Min_Net_COVID_Sentiment) |> 
+                                    arrange(desc(Delta_Net_COVID_Sentiment))
+  
+Min_Max_Net_COVID_Sentiments  
+
+write_csv(Min_Max_Net_COVID_Sentiments, '../data/Min_Max_Net_COVID_Sentiments.csv')
+
+```
+
+
+
+
+
+Find top firms with the largest Deltas in their Net COVID Sentiments over time.
+
+
+```{r}
+
+Top_Firms <- Min_Max_Net_COVID_Sentiments  |> 
+                  distinct(company_name)  
+Top_Firms
+
+write_csv(Top_Firms, '../data/Top_Firms.csv')
+
+
+```
+```{r}
+
+Dates_Min_Max_Net_COVID_Sentiments <- Min_Max_Net_COVID_Sentiments |> 
+          group_by(company_name) |> 
+          filter(Covid_Net_Sentiment == Min_Net_COVID_Sentiment | Covid_Net_Sentiment == Max_Net_COVID_Sentiment) |> 
+          arrange(desc(Delta_Net_COVID_Sentiment))
+
+Dates_Min_Max_Net_COVID_Sentiments
+
+
+write_csv(Dates_Min_Max_Net_COVID_Sentiments, '../data/Dates_Min_Max_Net_COVID_Sentiments.csv')
+
+```
+
+Duration Calculation: Find how long it took each firm to traverse the Delta between its lowest and highest Net COVID Sentiment:
+
+```{r}
+
+# Journey_Duration_Min_Max_Net_COVID_Sentiments <- Dates_Min_Max_Net_COVID_Sentiments |> 
+#                                                       group_by(company_name) |> 
+#                                                       mutate(Journey_Duration = interval(date_earningscall))
+# Journey_Duration_Min_Max_Net_COVID_Sentiments
+```
+ 
+  
+  
+Find how long it took each firm to traverse the Delta between its lowest and highest Net COVID Sentiment:
+
+```{r}
+
+# Journey_Duration <- Min_Max_Net_COVID_Sentiments |> 
+#                      group_by(company_name) |> 
+#                      mutate(Start_Date = Min_Max_Net_COVID_Sentiments$date_earningscall where(~Covid_Net_Sentiment==min(~Covid_Net_Sentiment))) |> 
+#                      mutate(End_Date = Min_Max_Net_COVID_Sentiments$date_earningscall where(~Covid_Net_Sentiment==max(~Covid_Net_Sentiment))) |> 
+#                      mutate(Journey_Duration = End_Date - Start_Date) |> 
+#                       arrange(Journey_Duration)
+#     
+# Journey_Duration
+
+```
+
+
