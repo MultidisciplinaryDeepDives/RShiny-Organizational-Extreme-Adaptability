@@ -49,10 +49,10 @@ Min_Max_Net_COVID_Sentiments <- NonZero_Firms |>
                                     mutate(Max_Net_COVID_Sentiment = max(Covid_Net_Sentiment)) |> 
                                     mutate(Delta_Net_COVID_Sentiment = Max_Net_COVID_Sentiment - Min_Net_COVID_Sentiment) |> 
                                     arrange(desc(Delta_Net_COVID_Sentiment))
+                                  #  arrange(desc(ticker)) |> 
+                                #    arrange(date_earningscall) 
   
 Min_Max_Net_COVID_Sentiments  
-
-write_csv(Min_Max_Net_COVID_Sentiments, '../data/Min_Max_Net_COVID_Sentiments.csv')
 
 ```
 
@@ -65,53 +65,118 @@ Find top firms with the largest Deltas in their Net COVID Sentiments over time.
 
 ```{r}
 
-Top_Firms <- Min_Max_Net_COVID_Sentiments  |> 
-                  distinct(company_name)  
-Top_Firms
+# Top_Firms <- Min_Max_Net_COVID_Sentiments  |> 
+#                   distinct(company_name)  
+# Top_Firms
 
-write_csv(Top_Firms, '../data/Top_Firms.csv')
+# write_csv(Top_Firms, '../data/Top_Firms.csv')
 
 
 ```
 ```{r}
 
-Dates_Min_Max_Net_COVID_Sentiments <- Min_Max_Net_COVID_Sentiments |> 
-          group_by(company_name) |> 
-          filter(Covid_Net_Sentiment == Min_Net_COVID_Sentiment | Covid_Net_Sentiment == Max_Net_COVID_Sentiment) |> 
-          arrange(desc(Delta_Net_COVID_Sentiment))
+# Dates_Min_Max_Net_COVID_Sentiments <- Min_Max_Net_COVID_Sentiments |> 
+#           group_by(company_name) |> 
+#           filter(Covid_Net_Sentiment == Min_Net_COVID_Sentiment | Covid_Net_Sentiment == Max_Net_COVID_Sentiment) |> 
+#           arrange(desc(Delta_Net_COVID_Sentiment))
+# 
+# Dates_Min_Max_Net_COVID_Sentiments
 
-Dates_Min_Max_Net_COVID_Sentiments
 
-
-write_csv(Dates_Min_Max_Net_COVID_Sentiments, '../data/Dates_Min_Max_Net_COVID_Sentiments.csv')
+# write_csv(Dates_Min_Max_Net_COVID_Sentiments, '../data/Dates_Min_Max_Net_COVID_Sentiments.csv')
 
 ```
 
-Duration Calculation: Find how long it took each firm to traverse the Delta between its lowest and highest Net COVID Sentiment:
+
+Find unique ticker symbols:
+
+```{r}
+# Tickers <- Dates_Min_Max_Net_COVID_Sentiments |> 
+#   group_by(company_name) |> 
+#   distinct(ticker)
+```
+
+
+```{r}
+# US_Tickers <- read_csv('../data/DescendingUSTickers_Extended.csv') 
+# 
+# US_Tickers <- US_Tickers |> 
+#                   distinct(ticker)
+
+# write_csv(US_Tickers, '../data/US_Tickers.csv')
+
+```
+
+
+
+Insert industry info via join:
 
 ```{r}
 
-# Journey_Duration_Min_Max_Net_COVID_Sentiments <- Dates_Min_Max_Net_COVID_Sentiments |> 
-#                                                       group_by(company_name) |> 
-#                                                       mutate(Journey_Duration = interval(date_earningscall))
-# Journey_Duration_Min_Max_Net_COVID_Sentiments
+Industries <- read_csv('../data/CompanyName_Ticker_Industry.csv')
+Industries
+
 ```
- 
-  
-  
-Find how long it took each firm to traverse the Delta between its lowest and highest Net COVID Sentiment:
+```{r}
+
+Industries <- Industries |> 
+                select(-ticker)
+Industries
+
+```
 
 ```{r}
 
-# Journey_Duration <- Min_Max_Net_COVID_Sentiments |> 
-#                      group_by(company_name) |> 
-#                      mutate(Start_Date = Min_Max_Net_COVID_Sentiments$date_earningscall where(~Covid_Net_Sentiment==min(~Covid_Net_Sentiment))) |> 
-#                      mutate(End_Date = Min_Max_Net_COVID_Sentiments$date_earningscall where(~Covid_Net_Sentiment==max(~Covid_Net_Sentiment))) |> 
-#                      mutate(Journey_Duration = End_Date - Start_Date) |> 
-#                       arrange(Journey_Duration)
-#     
-# Journey_Duration
+Net_COVID_Sentiments_Industries <- Min_Max_Net_COVID_Sentiments |> 
+    inner_join(Industries, by=join_by(company_name))
+
+Net_COVID_Sentiments_Industries
+
+```
+
+Exporting data for fetching of share price data:
+Arranging tickers by descending order in order to place the entries without tickers at the end
+
+```{r}
+
+# SharePrice_Write_CSV_Prep <- Net_COVID_Sentiments_Industries |> 
+#   arrange(desc(ticker))
+# 
+# write_csv(SharePrice_Write_CSV_Prep, "../data/DescendingTickers.csv")
+
+```
+
+Examines Net COVID Sentiment across industries over time: 
+
+Side note: Advertising Agencies is the reference Industry 
+
+```{r}
+
+lm(log(Covid_Net_Sentiment) ~ c(Industry) + date_earningscall + Covid_Exposure, data = Net_COVID_Sentiments_Industries) |> 
+    summary()
 
 ```
 
 
+
+
+
+Examines Positive COVID Sentiment across industries over time:
+
+```{r}
+
+lm(Covid_Pos_Sentiment ~ c(Industry) + date_earningscall + Covid_Exposure, data = Net_COVID_Sentiments_Industries) |> 
+    summary()
+
+```
+
+
+
+Examines Negative COVID Sentiment across industries over time:
+
+```{r}
+
+lm(Covid_Neg_Sentiment ~ c(Industry) + date_earningscall + Covid_Exposure + PRiskT_health, data = Net_COVID_Sentiments_Industries) |> 
+    summary()
+
+```
