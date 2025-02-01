@@ -12,6 +12,7 @@ library(dplyr)
 library(lubridate)
 library(corrr)
 library(haven)
+library(lme4)
 ```
 
 
@@ -33,7 +34,7 @@ Find entries whose COVID Net Sentiment isn't 0
 NonZero_Firms <- firms |> 
       filter(`Covid_Net_Sentiment` != 0) |> 
       filter(hqcountrycode == 'US') |> 
-      mutate(date_earningscall = dmy(date_earningscall)) 
+      mutate(Day_of_EarningsCall = dmy(date_earningscall)) 
       
 NonZero_Firms 
 ```
@@ -50,7 +51,7 @@ Min_Max_Net_COVID_Sentiments <- NonZero_Firms |>
                                     mutate(Delta_Net_COVID_Sentiment = Max_Net_COVID_Sentiment - Min_Net_COVID_Sentiment) |> 
                                     arrange(desc(Delta_Net_COVID_Sentiment))
                                   #  arrange(desc(ticker)) |> 
-                                #    arrange(date_earningscall) 
+                                #    arrange(Day_of_EarningsCall) 
   
 Min_Max_Net_COVID_Sentiments  
 
@@ -113,24 +114,24 @@ Insert industry info via join:
 
 ```{r}
 
-Industries <- read_csv('../data/CompanyName_Ticker_Industry.csv')
-Industries
+# Industries <- read_csv('../data/CompanyName_Ticker_Industry.csv')
+# Industries
 
 ```
 ```{r}
 
-Industries <- Industries |> 
-                select(-ticker)
-Industries
+# Industries <- Industries |> 
+#                 select(-ticker)
+# Industries
 
 ```
 
 ```{r}
 
-Net_COVID_Sentiments_Industries <- Min_Max_Net_COVID_Sentiments |> 
-    inner_join(Industries, by=join_by(company_name))
-
-Net_COVID_Sentiments_Industries
+# Net_COVID_Sentiments_Industries <- Min_Max_Net_COVID_Sentiments |> 
+#     inner_join(Industries, by=join_by(company_name))
+# 
+# Net_COVID_Sentiments_Industries
 
 ```
 
@@ -139,12 +140,31 @@ Arranging tickers by descending order in order to place the entries without tick
 
 ```{r}
 
-# SharePrice_Write_CSV_Prep <- Net_COVID_Sentiments_Industries |> 
-#   arrange(desc(ticker))
+# SharePrice_Write_CSV_Prep <- Net_COVID_Sentiments_Industries |>
+#   arrange(desc(ticker)) |> 
+#   arrange(desc(Industry))
 # 
-# write_csv(SharePrice_Write_CSV_Prep, "../data/DescendingTickers.csv")
+# write_csv(SharePrice_Write_CSV_Prep, "../data/Descending_Ticker_Industry.csv")
 
 ```
+
+
+
+
+```{r}
+Closing_Share_Price_Across_Time <- read_csv('../data/Descending_Ticker_Industry_SharePrice.csv')
+Closing_Share_Price_Across_Time
+```
+
+
+```{r}
+# Closing_Share_Price_Across_Time_dates <- Closing_Share_Price_Across_Time |> mutate(date_earningscall = dmy(date_earningscall)) 
+# Closing_Share_Price_Across_Time_dates
+
+```
+
+
+
 
 Examines Net COVID Sentiment across industries over time: 
 
@@ -152,7 +172,7 @@ Side note: Advertising Agencies is the reference Industry
 
 ```{r}
 
-lm(log(Covid_Net_Sentiment) ~ c(Industry) + date_earningscall + Covid_Exposure, data = Net_COVID_Sentiments_Industries) |> 
+lm(log(Covid_Net_Sentiment) ~ c(Industry) + Day_of_EarningsCall + Covid_Exposure, data = Closing_Share_Price_Across_Time) |> 
     summary()
 
 ```
@@ -165,18 +185,191 @@ Examines Positive COVID Sentiment across industries over time:
 
 ```{r}
 
-lm(Covid_Pos_Sentiment ~ c(Industry) + date_earningscall + Covid_Exposure, data = Net_COVID_Sentiments_Industries) |> 
+lm(Covid_Pos_Sentiment ~ c(Industry) + Day_of_EarningsCall + Covid_Exposure, data = Closing_Share_Price_Across_Time) |> 
     summary()
 
 ```
+ 
+```{r}
 
+lm(Covid_Neg_Sentiment ~ c(Industry) + Day_of_EarningsCall + Covid_Exposure + PRiskT_health, data = Closing_Share_Price_Across_Time) |> 
+    summary()
+
+``` 
 
 
 Examines Negative COVID Sentiment across industries over time:
 
 ```{r}
 
-lm(Covid_Neg_Sentiment ~ c(Industry) + date_earningscall + Covid_Exposure + PRiskT_health, data = Net_COVID_Sentiments_Industries) |> 
+lm(Covid_Neg_Sentiment ~ c(Industry) + Day_of_EarningsCall + Covid_Exposure + PRiskT_health, data = Closing_Share_Price_Across_Time) |> 
     summary()
 
 ```
+
+ 
+
+
+```{r}
+
+lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(Industry) + Day_of_EarningsCall + Covid_Net_Sentiment + Covid_Net_Sentiment:c(Industry), data = Closing_Share_Price_Across_Time) |> 
+    summary()
+
+```
+
+ 
+```{r}
+
+PercentChange_SharePrices_HierchicalIndustryCompany <- glmer(
+                                                              "Percent_Change_bt_DayBefore_y_DayAfter ~ Day_of_EarningsCall + Covid_Net_Sentiment + c(Industry) + Covid_Net_Sentiment:c(Industry) + (1 | company_name)", 
+                                                              data = Closing_Share_Price_Across_Time,
+                                                              family = gaussian) 
+    
+summary(PercentChange_SharePrices_HierchicalIndustryCompany)$coefficients  
+
+``` 
+
+```{r}
+summary(PercentChange_SharePrices_HierchicalIndustryCompany)$coefficientsp[,4]  
+```
+
+```{r}
+library(broom.mixed)
+```
+
+```{r}
+tidy(PercentChange_SharePrices_HierchicalIndustryCompany)
+```
+
+```{r}
+FixedEffects_IndustryCoefficients <- tidy(PercentChange_SharePrices_HierchicalIndustryCompany) |> 
+  filter(effect == "fixed") # |> 
+  # select(term, p.value)
+
+FixedEffects_IndustryCoefficients
+```
+
+
+```{r}
+TopIndustries <- FixedEffects_IndustryCoefficients |> 
+    filter(estimate > std.error)  |>  
+    filter(statistic > 1.96)
+
+TopIndustries
+```
+ 
+```{r}
+BottomIndustries <- FixedEffects_IndustryCoefficients |> 
+    filter(estimate < -std.error)  |>  
+    filter(statistic < -1.96)
+
+BottomIndustries
+``` 
+
+
+```{r}
+tidy(PercentChange_SharePrices_HierchicalIndustryCompany, conf.int = TRUE) |> 
+  filter(effect == "fixed") |> 
+  ggplot(aes(x = term, y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = 0.05))
+```
+
+
+
+```{r}
+tidy(PercentChange_SharePrices_HierchicalIndustryCompany, effects = "ran_vals") 
+```
+
+
+```{r}
+Random_Effect_Coeff_Desc <- tidy(PercentChange_SharePrices_HierchicalIndustryCompany, effects = "ran_vals") |> arrange(desc(estimate))
+Random_Effect_Coeff_Desc 
+```
+
+```{r}
+TopFirms <- Random_Effect_Coeff_Desc |> 
+              filter(estimate > std.error)
+TopFirms
+```
+
+
+```{r}
+Top27Firms <- Random_Effect_Coeff_Desc |> head(27) 
+Top27Firms
+```
+
+```{r}
+ggplot(data=TopFirms, aes(x=level, y=estimate)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  coord_flip() +
+  theme_minimal() +
+  labs(x = "Companies") + 
+  labs(y = "Standard Deviations from Respective Industries") + 
+  labs(title = "Stellar Companies Who Outperformed Their Respective Industries", subtitle = "Mixed-Effect Linear Regression Analysis of How Net COVID-Related Sentiments Correlate with Percentage Change in Share Price")
+```
+
+
+
+
+
+```{r}
+# vcov(PercentChange_SharePrices_HierchicalIndustryCompany)
+```
+
+```{r} 
+
+PercentChange_SharePrices_HierchicalIndustryCompany <- lmer(Percent_Change_bt_DayBefore_y_DayAfter ~ Day_of_EarningsCall + Covid_Neg_Sentiment + c(Industry) + Covid_Neg_Sentiment:c(Industry) + (1 | company_name), data = Closing_Share_Price_Across_Time) 
+    
+summary(PercentChange_SharePrices_HierchicalIndustryCompany)  
+ 
+```
+
+
+```{r} 
+
+PercentChange_SharePrices_HierchicalIndustryCompany <- lmer(Percent_Change_bt_DayBefore_y_DayAfter ~ Day_of_EarningsCall + Covid_Pos_Sentiment + c(Industry) + Covid_Pos_Sentiment:c(Industry) + (1 | company_name), data = Closing_Share_Price_Across_Time) 
+    
+summary(PercentChange_SharePrices_HierchicalIndustryCompany)  
+ 
+```
+
+
+
+```{r}
+
+lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(Industry) + Day_of_EarningsCall + Covid_Exposure + Covid_Pos_Sentiment + Covid_Pos_Sentiment:c(Industry), data = Closing_Share_Price_Across_Time) |> 
+    summary()
+
+```
+
+
+```{r}
+
+lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(Industry) + Day_of_EarningsCall + Covid_Neg_Sentiment + Covid_Neg_Sentiment:c(Industry), data = Closing_Share_Price_Across_Time) |> 
+    summary()
+
+```
+
+
+```{r}
+ 
+
+lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(company_name) + Day_of_EarningsCall + Covid_Net_Sentiment:c(company_name), data = Closing_Share_Price_Across_Time) |> 
+    summary()
+ 
+```
+
+
+
+```{r}
+
+lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(Industry) + c(company_name) + Day_of_EarningsCall + Covid_Net_Sentiment + Covid_Net_Sentiment:c(company_name) + Covid_Net_Sentiment:c(Industry), data = Closing_Share_Price_Across_Time) |> 
+    summary()
+
+```
+
+
+
+
+
