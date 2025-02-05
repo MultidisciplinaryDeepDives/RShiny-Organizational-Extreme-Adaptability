@@ -1,6 +1,5 @@
-*/data/
 .DS_Store
-
+*.dta
 
 # History files
 .Rhistory
