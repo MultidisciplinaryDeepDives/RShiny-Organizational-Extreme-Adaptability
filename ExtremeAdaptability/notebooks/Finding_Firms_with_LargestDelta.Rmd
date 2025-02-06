@@ -14,6 +14,9 @@ library(corrr)
 library(haven)
 library(lme4) 
 library(broom.mixed) 
+library(ggrepel)
+library(ggpubr)
+library(ggpmisc)
 ```
 
 
@@ -286,6 +289,10 @@ BottomIndustries
 ``` 
 
 
+
+
+
+
 ```{r}
 tidy(PercentChange_SharePrices_HierchicalIndustryCompany, conf.int = TRUE) |> 
   filter(effect == "fixed") |> 
@@ -310,7 +317,7 @@ tibble(resid=resid(PercentChange_SharePrices_HierchicalIndustryCompany), date = 
   geom_point(alpha = 0.2) +
   geom_smooth() +
   ylim(-25, 25)
-  stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n")), vstep = 22, size=3.8) 
+  # stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n")), vstep = 22, size=3.8) 
 ```
 
 
@@ -348,12 +355,12 @@ BarGraph_BottomIndustries
 
 
 ```{r}
-tidy(PercentChange_SharePrices_HierchicalIndustryCompany, effects = "ran_vals") 
+tidy(PercentChange_SharePrices_HierchicalIndustryCompany, effects = "ran_vals", conf.int=TRUE) 
 ```
 
 
 ```{r}
-Random_Effect_Coeff_Desc <- tidy(PercentChange_SharePrices_HierchicalIndustryCompany, effects = "ran_vals") |> arrange(desc(estimate))
+Random_Effect_Coeff_Desc <- tidy(PercentChange_SharePrices_HierchicalIndustryCompany, effects = "ran_vals", conf.int=TRUE) |> arrange(desc(estimate))
 Random_Effect_Coeff_Desc 
 ```
 
@@ -539,15 +546,67 @@ Restaurants
 
 ```{r}
 TopFirms <- Random_Effect_Coeff_Desc |> 
-              filter(estimate > std.error)
+              filter(conf.low > 0)
 TopFirms
+```
+
+```{r}
+BottomFirms <- Random_Effect_Coeff_Desc |> 
+              filter(conf.high < 0)
+BottomFirms 
 ```
 
 
 ```{r}
-Top27Firms <- Random_Effect_Coeff_Desc |> head(27) 
-Top27Firms
+StatSig_Firms <- Random_Effect_Coeff_Desc |> 
+              filter(conf.high < 0 | conf.low > 0)
+StatSig_Firms 
 ```
+
+
+```{r}
+Top20Firms <- Random_Effect_Coeff_Desc |> head(20) 
+Top20Firms
+```
+
+
+Add a boolean statistical significance column:
+
+```{r}
+
+Firm_Industry_Random_Effect_Coeff_Desc_StatSig <- Random_Effect_Coeff_Desc  |> 
+  inner_join(Company_Industry, by = join_by(level == company_name)) |> 
+  select(level, estimate, conf.low, conf.high, Industry) |> 
+  filter(conf.high < 0 | conf.low > 0) |> 
+  mutate(`Statistically Significant?` = "Yes")
+
+Firm_Industry_Random_Effect_Coeff_Desc_StatSig
+```
+
+
+```{r}
+
+Firm_Industry_Random_Effect_Coeff_Desc_StatInsig <- Random_Effect_Coeff_Desc  |> 
+  inner_join(Company_Industry, by = join_by(level == company_name)) |> 
+  select(level, estimate, conf.low, conf.high, Industry) |> 
+  filter(conf.high > 0 & conf.low < 0) |> 
+  mutate(`Statistically Significant?` = "No")
+
+Firm_Industry_Random_Effect_Coeff_Desc_StatInsig
+```
+
+
+Piecing the firms whose stats are statistically significant back together with those whose stats aren't:
+
+
+```{r}
+Firm_Industry_Random_Effect_Coeff_Desc_StatSig_y_StatInsig <- bind_rows(Firm_Industry_Random_Effect_Coeff_Desc_StatSig, Firm_Industry_Random_Effect_Coeff_Desc_StatInsig)
+
+Firm_Industry_Random_Effect_Coeff_Desc_StatSig_y_StatInsig
+```
+
+
+
 
 ```{r} 
 BarGraph_AllFirms <- ggplot(data=Random_Effect_Coeff_Desc, aes(x=reorder(level, estimate), y=estimate)) +
@@ -563,7 +622,7 @@ BarGraph_AllFirms
 
 
 ```{r}
-BarGraph_TopFirms <- ggplot(data=TopFirms, aes(x=reorder(level, estimate), y=estimate)) +
+BarGraph_StatSig_Firms <- ggplot(data=StatSig_Firms, aes(x=reorder(level, estimate), y=estimate)) +
   geom_bar(stat="identity", fill="steelblue") +
   coord_flip() +
   theme_minimal() +
@@ -571,10 +630,30 @@ BarGraph_TopFirms <- ggplot(data=TopFirms, aes(x=reorder(level, estimate), y=est
   labs(y = "Additional % of Increase in Stock Price from Industry Average") + 
   labs(title = "Stellar Companies Whose Share Prices Outperformed Those in Their Respective Industries", subtitle = "Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
-BarGraph_TopFirms
+BarGraph_StatSig_Firms
+```
+```{r}
+select_company = c("Carmax Inc")
+
+Closing_Share_Price_Across_Time_DropNA_highlight <- Closing_Share_Price_Across_Time_DropNA |> 
+  mutate(highlight = case_when(company_name %in% select_company ~ TRUE,
+                               .default = FALSE))
 ```
 
 
+```{r}
+
+Closing_Share_Price_Across_Time_DropNA_highlight |> 
+  filter(Industry == Industry[(Closing_Share_Price_Across_Time_DropNA_highlight$company_name=="Carmax Inc")]) |> 
+  ggplot(aes(x = Day_of_EarningsCall, y = Percent_Change_bt_DayBefore_y_DayAfter)) +
+  geom_point(aes(size = Covid_Net_Sentiment, color = highlight), alpha = 0.7, show.legend = FALSE) +
+  geom_smooth(method = lm, formula = y ~ x) + 
+  scale_color_manual(values = c("orange", "black")) +
+# scale_size_manual(values = c(1, 3)) +
+# geom_label_repel(data = Closing_Share_Price_Across_Time_DropNA_highlight |> filter(highlight == TRUE), aes(label = company_name)) +
+  stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n")), vstep = 22, size=3.8) 
+
+```
 
 
 
