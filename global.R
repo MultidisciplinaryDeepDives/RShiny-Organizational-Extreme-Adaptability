@@ -11,8 +11,7 @@ library(lme4)
 library(broom.mixed) 
 library(ggrepel)
 library(ggpubr)
-library(ggpmisc)
-
+library(ggpmisc) 
 
 
 
@@ -73,21 +72,21 @@ Closing_Share_Price_Across_Time_DropNA <- Closing_Share_Price_Across_Time |>
 
 
 
-# select_company = c("Carmax Inc")
+# select_company=c("Carmax Inc")
 # 
 # Closing_Share_Price_Across_Time_DropNA_highlight <- Closing_Share_Price_Across_Time_DropNA |> 
-#   mutate(highlight = case_when(company_name %in% select_company ~ TRUE,
-#                                .default = FALSE))
+#   mutate(highlight=case_when(company_name %in% select_company ~ TRUE,
+#                                .default=FALSE))
 # 
 # Closing_Share_Price_Across_Time_DropNA_highlight |> 
 #   filter(Industry == Industry[(Closing_Share_Price_Across_Time_DropNA_highlight$company_name=="Carmax Inc")]) |> 
-#   ggplot(aes(x = Day_of_EarningsCall, y = Percent_Change_bt_DayBefore_y_DayAfter)) +
-#   geom_point(aes(size = Covid_Net_Sentiment, color = highlight), alpha = 0.7, show.legend = FALSE) +
-#   geom_smooth(method = lm, formula = y ~ x) + 
-#   scale_color_manual(values = c("orange", "black")) +
-#   # scale_size_manual(values = c(1, 3)) +
-#   # geom_label_repel(data = Closing_Share_Price_Across_Time_DropNA_highlight |> filter(highlight == TRUE), aes(label = company_name)) +
-#   stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n")), vstep = 22, size=3.8) 
+#   ggplot(aes(x=Day_of_EarningsCall, y=Percent_Change_bt_DayBefore_y_DayAfter)) +
+#   geom_point(aes(size=Covid_Net_Sentiment, color=highlight), alpha=0.7, show.legend=FALSE) +
+#   geom_smooth(method=lm, formula=y ~ x) + 
+#   scale_color_manual(values=c("orange", "black")) +
+#   # scale_size_manual(values=c(1, 3)) +
+#   # geom_label_repel(data=Closing_Share_Price_Across_Time_DropNA_highlight |> filter(highlight == TRUE), aes(label=company_name)) +
+#   stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n")), vstep=22, size=3.8) 
 # 
 
 
