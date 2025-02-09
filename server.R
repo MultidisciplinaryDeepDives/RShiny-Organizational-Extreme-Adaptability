@@ -57,7 +57,7 @@ function(input, output, session) {
             axis.text.x=element_text(size = 22, face = "bold"), 
             axis.title.x=element_text(size = 23, face = "bold"), 
             axis.title.y=element_text(size = 79/sqrt(max(1, nrow(plot_data_func()))), face = "bold"), 
-            plot.title = element_text(size = 25, face = "bold"))
+            plot.title = element_text(size = 25))
     
   })
   
@@ -68,7 +68,7 @@ function(input, output, session) {
     Tab2_IndustryName <- Closing_Share_Price_Across_Time_DropNA |> 
       filter(company_name == input$Chosen_Firm) |> pull(Industry) |> unique()
     
-    title2 <- glue("Changes in Stock Price of {input$Chosen_Firm} vs. Peers in the {Tab2_IndustryName} Industry as a Function of Net COVID Sentiment over Time")
+    title2 <- glue("Changes in Stock Price of {input$Chosen_Firm} vs. Peers in the {Tab2_IndustryName} Industry as a Function of Net COVID Sentiment")
     
     select_company = c(input$Chosen_Firm)
     
@@ -104,7 +104,7 @@ function(input, output, session) {
         axis.text.x=element_text(size = 17, face = "bold"), 
         axis.title.x=element_text(size = 20, face = "bold"), 
         axis.title.y=element_text(size = 20, face = "bold"), 
-        plot.title = element_text(size = 24, face = "bold")
+        plot.title = element_text(size = 24) 
       ) +
       labs(
         x = "Net COVID Sentiment",

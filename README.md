@@ -1,4 +1,4 @@
-## Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic
+## Mixed Effect Regression Analysis: How Changes in Stock Price Correlate with COVID Sentiment in Earnings Calls --> Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic
 
 **Executive Summary**:
 
@@ -9,7 +9,7 @@ https://interdisciplinary-deep-dives.shinyapps.io/Organizational_Extreme_Adaptab
 
 **Motivation**:
 
-To learn best practices from firms that navigated the pandemic well, operationally, financially, and diplomatically. On the other hand, I can also see how someone might incorporate insights from this project into one’s investment strategy. 
+To identify firms that navigated the pandemic well, operationally, financially, and diplomatically. And to learn (hopefully best practices) from them. On the other hand, I can also see how someone might incorporate the insights distilled from this project into one’s investment strategy. 
 
 **Data Questions**:
 1)	Find US firms' stock prices on the day before/after each earnings call. Then find the correlation between Net COVID Sentiment and stock price.
