@@ -9,7 +9,7 @@ https://interdisciplinary-deep-dives.shinyapps.io/Organizational_Extreme_Adaptab
 
 **Motivation**:
 
-To identify firms that navigated the pandemic well, operationally, financially, and diplomatically. And to learn (hopefully best practices) from them. On the other hand, I can also see how someone might incorporate the insights distilled from this project into one’s investment strategy. 
+To identify firms that navigated the pandemic well, operationally, financially, and diplomatically. And to learn (hopefully best practices) from them. On the other hand, I can also see how someone might incorporate the insights distilled from this project into one’s investment strategy. On a cautionary note, COVID Sentiment in Earnings Calls is only 1 out of many factors that contribute to stock price and company performance. In many ways, this project is a proof-of-concept for analyzing a variety of factors that may correlate with stock price and company performance. 
 
 **Data Questions**:
 1)	Find US firms' stock prices on the day before/after each earnings call. Then find the correlation between Net COVID Sentiment and stock price.
