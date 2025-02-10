@@ -24,3 +24,4 @@ To identify firms that navigated the pandemic well, operationally, financially, 
 4) Yale School of Management’s (Open) Course on Financial Markets: https://online.yale.edu/courses/financial-markets
 5) Yale’s (Open) Course on Financial Theory: https://online.yale.edu/courses/financial-theory
 6) Yale School of Management’s Course on Investment Management (history & statistics): https://som.yale.edu/faculty-research/faculty-directory/paul-goldsmith-pinkham
+7) Tarek A. Hassan, Stephan Hollander, Laurence van Lent, Markus Schwedeler, Ahmed Tahoun, "Firm-level Exposure to Epidemic Diseases: Covid-19, SARS, and H1N1," 2020, mimeo London Business School. Avilable at SSRN: https://ssrn.com/abstract=3566530 
