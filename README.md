@@ -21,6 +21,6 @@ To identify firms that navigated the pandemic well, operationally, financially, 
 1) Harvard Business Review IdeaCast: “Why Some Companies Thrived During the Pandemic” https://podcasts.apple.com/us/podcast/hbr-ideacast/id152022135?i=1000551887123 
 2) Competing in the New World of Work: How Radical Adaptability Separates the Best from the Rest. https://hbr.org/webinar/2022/01/competing-in-the-new-world-of-work (Book & Webinar Recording)
 3) “The Unprecedented Stock Market Reaction to COVID-19” (paper from Stanford, U. Chicago, Northwestern, and U. Penn): https://pdfs.semanticscholar.org/bcca/da5783c5fdb0d5444c8901f931075a034f78.pdf 
-4) Yale School of Management’s (Open) Course on Financial Markets: https://online.yale.edu/courses/financial-markets 
-5) Yale’s (Open) Course on Financial Theory: https://online.yale.edu/courses/financial-theory 
-6) Yale School of Management’s Course on Investment Management (history & statistics): https://som.yale.edu/faculty-research/faculty-directory/paul-goldsmith-pinkham 
+4) Yale School of Management’s (Open) Course on Financial Markets: https://online.yale.edu/courses/financial-markets
+5) Yale’s (Open) Course on Financial Theory: https://online.yale.edu/courses/financial-theory
+6) Yale School of Management’s Course on Investment Management (history & statistics): https://som.yale.edu/faculty-research/faculty-directory/paul-goldsmith-pinkham
