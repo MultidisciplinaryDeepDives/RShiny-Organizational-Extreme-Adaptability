@@ -44,7 +44,7 @@ fluidPage(
     # Main Panel's top portion has bar graph; bottom portion has table
     mainPanel(
       tabsetPanel(
-        tabPanel(h3('Graph & Table: Distribution of Correlational Estimates Across an Industry'), 
+        tabPanel(h3('Graph & Table: Distribution of Estimates Across an Industry'), 
                  fluidRow(
                    column( 
                      width = 12, 
@@ -56,7 +56,7 @@ fluidPage(
                    dataTableOutput("selecteddataTable")
                  )
         ),
-        tabPanel(h3('Graph: Correlations of Firm Stock Price Changes with Net COVID Sentiment in Comparison to Industry'),  
+        tabPanel(h3('Graph: Correlations of Stock Price Changes with Net COVID Sentiment in Comparison to Industry'),  
                  fluidRow(
                    column( 
                      width = 12, 

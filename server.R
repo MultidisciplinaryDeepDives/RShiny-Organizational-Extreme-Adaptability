@@ -50,7 +50,7 @@ function(input, output, session) {
       theme_minimal() +
       labs(
         x = "Companies",
-        y = "Additional % of Change in Stock Price from Industry Average",
+        y = "Additional % of Change in Stock Price from Industrial Average",
         title = title
       ) +
       theme(axis.text.y=element_text(size = 67/sqrt(max(1, nrow(plot_data_func()))), face = "bold"), 

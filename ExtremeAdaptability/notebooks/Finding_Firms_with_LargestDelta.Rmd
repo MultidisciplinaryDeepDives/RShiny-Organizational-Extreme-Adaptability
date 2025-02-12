@@ -156,7 +156,9 @@ Arranging tickers by descending order in order to place the entries without tick
 
 
 ```{r}
-Closing_Share_Price_Across_Time <- read_csv('../data/Descending_Ticker_Industry_SharePrice.csv')
+Closing_Share_Price_Across_Time_AllYears <- read_csv('../data/Descending_Ticker_Industry_SharePrice.csv')
+
+Closing_Share_Price_Across_Time  <- Closing_Share_Price_Across_Time_AllYears |> filter(Day_of_EarningsCall > 2019-12-31)
 Closing_Share_Price_Across_Time
 ```
 
@@ -228,9 +230,15 @@ PercentChange_SharePrices_HierchicalIndustryCompany_RandomIndustryFirms <- glmer
   data=Closing_Share_Price_Across_Time,
   family=gaussian) 
 
-summary(PercentChange_SharePrices_HierchicalIndustryCompany_RandomIndustryFirms)$coefficients  
-
+PercentChange_SharePrices_HierchicalIndustryCompany_RandomIndustryFirms 
 ``` 
+
+```{r}
+summary(PercentChange_SharePrices_HierchicalIndustryCompany_RandomIndustryFirms)$coefficients  
+```
+p-value for Day_of_EarningsCall < 0.05
+p-value for Covid_Net_Sentiment < 0.01
+
 ```{r}
 tidy(PercentChange_SharePrices_HierchicalIndustryCompany_RandomIndustryFirms)
 ```
@@ -340,6 +348,35 @@ BarGraph_StatSig_Industries <- ggplot(data=StatSig_Industries_Time_y_Interaction
 BarGraph_StatSig_Industries
 
 ```
+
+
+```{r}
+
+Underscore_Removal = function(lab) {
+  str_replace(lab, "_", " ") |> str_to_title()
+}
+
+cIndustry_Removal = function(lab) {
+  str_remove(lab, "c(Industry)")  
+}
+
+DayOfEarningsCall_Removal = function(lab) {
+  str_remove(lab, "Day_of_EarningsCall")  
+}
+
+BarGraph_StatSig_Industries$term <- BarGraph_StatSig_Industries$term |>
+                                      map(Underscore_Removal)
+
+BarGraph_StatSig_Industries$term <- BarGraph_StatSig_Industries$term |> 
+                                      map(cIndustry_Removal) 
+
+BarGraph_StatSig_Industries$term <- BarGraph_StatSig_Industries$term |> 
+                                      map(DayOfEarningsCall_Removal)
+
+BarGraph_StatSig_Industries
+
+```
+
 ```{r}
 StatSig_IndustryNetCOVIDSentimentInteraction <- StatSig_Industries_Time_y_InteractionTermIndustryNetCOVIDSentiment |> filter(str_detect(term, ":Covid_Net_Sentiment"))
 StatSig_IndustryNetCOVIDSentimentInteraction
@@ -359,12 +396,26 @@ BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction <- ggplot(data=StatSig_Ind
                                                           theme_minimal() +
                                                           labs(x="Industries") + 
                                                           labs(y="% Change in Stock Price as A Function of Net COVID Sentiment") + 
-                                                          labs(title="Industries Whose Stock Price Changes Were Disproportionally Impacted by Net COVID Sentiment", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
+                                                          labs(title="Industries Whose Stock Price Changes Disproportionally Correlate with Net COVID Sentiment", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction
 
 
 ```
+
+```{r}
+
+Str_Remove_Covid_Net_Sentiment = function(lab) {
+  str_remove(lab, ":Covid_Net_Sentiment")  
+}
+
+BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction$term <- BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction$term |>
+                                      map(Str_Remove_Covid_Net_Sentiment)
+
+BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction
+
+```
+
 
 
 
@@ -420,7 +471,7 @@ Grocery_Stores <- ggplot(data=Firm_Industry_Random_Effect_Coeff_Desc |> filter(I
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Grocery Stores with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Grocery_Stores
@@ -434,7 +485,7 @@ Auto_n_Truck_Dealerships <- ggplot(data=Firm_Industry_Random_Effect_Coeff_Desc |
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Auto/Truck Dealership Firms with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Auto_n_Truck_Dealerships
@@ -446,7 +497,7 @@ Industrial_Distribution <- ggplot(data=Firm_Industry_Random_Effect_Coeff_Desc |>
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Industrial Distribution Firms with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Industrial_Distribution
@@ -463,7 +514,7 @@ Discount_Stores <- ggplot(data=Firm_Industry_Random_Effect_Coeff_Desc |> filter(
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Discount Stores with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Discount_Stores
@@ -476,7 +527,7 @@ Consumer_Electronics <- ggplot(data=Firm_Industry_Random_Effect_Coeff_Desc |> fi
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Consumer Electronics Firms with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Consumer_Electronics 
@@ -488,7 +539,7 @@ Integrated_Freight_n_Logistics <- ggplot(data=Firm_Industry_Random_Effect_Coeff_
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Integrated Freight & Logistics Firms with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Integrated_Freight_n_Logistics
@@ -506,7 +557,7 @@ Electronic_Gaming_n_Multimedia <- ggplot(data=Firm_Industry_Random_Effect_Coeff_
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Change in Stock Price from Industry Average") + 
+  labs(y="Additional % of Correlative Change in Stock Price from Industry Average") + 
   labs(title="Changes in Stock Prices of Electronic Gaming & Multimedia Firms with Respect to Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 Electronic_Gaming_n_Multimedia
@@ -585,7 +636,7 @@ BarGraph_AllFirms <- ggplot(data=Random_Effect_Coeff_Desc, aes(x=reorder(level, 
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="% of Additional Change in Stock Price from Industry Average") + 
+  labs(y="% of Additional Correlative Change in Stock Price from Industry Average") + 
   labs(title="Stellar Companies Whose Share Prices Outperformed Those in Their Respective Industries", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 BarGraph_AllFirms 
@@ -598,8 +649,8 @@ BarGraph_StatSig_Firms <- ggplot(data=StatSig_Firms, aes(x=reorder(level, estima
   coord_flip() +
   theme_minimal() +
   labs(x="Companies") + 
-  labs(y="Additional % of Increase in Stock Price from Industry Average") + 
-  labs(title="Stellar Companies Whose Share Prices Outperformed Those in Their Respective Industries", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
+  labs(y="Additional % of Correlative Change in Stock Price from Industrial Average") + 
+  labs(title="Notable Companies Whose Correlational Performance Exceeded Their Respective Industry", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
 BarGraph_StatSig_Firms
 ```

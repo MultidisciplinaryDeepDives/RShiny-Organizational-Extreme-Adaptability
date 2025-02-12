@@ -1,4 +1,4 @@
-## Mixed Effect Regression Analysis: How Changes in Stock Price Correlate with COVID Sentiment in Earnings Calls --> Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic
+## Mixed Effect Regression Analysis: How Changes in Stock Price Correlate with COVID Sentiment in Earnings Calls --> Finding Pricing Inefficiencies + Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic
 
 **Executive Summary**:
 
@@ -7,9 +7,17 @@ We live in an interconnected world in which nothing exists in isolation or in a 
 The accompanying app can be accessed here:
 https://interdisciplinary-deep-dives.shinyapps.io/Organizational_Extreme_Adaptability/
 
+
 **Motivation**:
 
-To identify firms that navigated the pandemic well, operationally, financially, and diplomatically. And to learn (hopefully best practices) from them. On the other hand, I can also see how someone might incorporate the insights distilled from this project into one’s investment strategy. On a cautionary note, COVID Sentiment in Earnings Calls is only 1 out of many factors that contribute to stock price and company performance. In many ways, this project is a proof-of-concept for analyzing a variety of factors that may correlate with stock price and company performance. 
+Usually, market prices stocks efficiently, by considering all publicly available information. Deviations in correlations (with COVID Sentiments, along with other factors) can hint at inefficiencies in pricing. Investors who want to beat the stock market often seek out inefficiently priced stocks. Hence, this analysis / app can be (use with caution) a screening tool for investors. Investors would then want to look up these firms’ 10k documents, in order to take a deeper look into financial health/unhealth of highlighted firms. 
+
+Because this analysis is retrospective in nature, it of course has limitations in predicting the future. Secondarily, this screening process (as a 1st pass tool) potentially highlights firms that navigated through the pandemic exceptionally well. One can potentially glean best practices from highlighted firms, which include positive transformation include shifting to online sales, working from home, cash conservation, quickly adjust sales of products/services according to market conditions, bringing furloughed employees back.
+
+This project is a proof-of-concept for analyzing a variety of factors that may correlate with stock price and company performance. 
+
+
+
 
 **Data Questions**:
 1)	Find US firms' stock prices on the day before/after each earnings call. Then find the correlation between Net COVID Sentiment and stock price.
