@@ -5,12 +5,12 @@
 We live in an interconnected world in which nothing exists in isolation or in a vacuum. Shock and recovery from the SARS-CoV-2 pandemic can be observed in firms’ earnings calls and share performance. Insights regarding adaptability (e.g. asynchronous collaboration, acting on foresight with agility, remote/hybrid work) and team-level practice of resilience (e.g. committing to each other and checking on each other’s wellbeing) can hopefully be gained from analyzing changes in the net COVID-related sentiment in their earnings calls—whose presentation can be subdivided into public relations management and actual improvements in operations and/or earnings. The latter of which can be gleaned from their 10k documents. Firm’s improvement/turnaround (in comparison to one’s peers in the same industry) in this context often involves either pre-existing positioning/alignment or repositioning/realignment around products, services, and/or operations. 
 
 The accompanying app can be accessed here:
-https://interdisciplinary-deep-dives.shinyapps.io/Organizational_Extreme_Adaptability/
+https://interdisciplinary-deep-dives.shinyapps.io/Organizational-Extreme-Adaptability/
 
 
 **Motivation**:
 
-Usually, market prices stocks efficiently, by considering all publicly available information. Deviations in correlations (with COVID Sentiments, along with other factors) can hint at inefficiencies in pricing. Investors who want to beat the stock market often seek out inefficiently priced stocks. Hence, this analysis / app can be (use with caution) a screening tool for investors. Investors would then want to look up these firms’ 10k documents, in order to take a deeper look into financial health/unhealth of highlighted firms. 
+Usually, market prices stocks efficiently, by considering all publicly available information. Deviations in correlations (with COVID Sentiments, along with other factors) can hint at inefficiencies in pricing. Investors who want to beat the stock market often seek out inefficiently priced stocks. Hence, this analysis / app can be (use with caution) a screening tool for investors. Investors would then want to look up these firms’ 10k annual reports, in order to take a deeper look into financial health/unhealth of highlighted firms. 
 
 Because this analysis is retrospective in nature, it of course has limitations in predicting the future. Secondarily, this screening process (as a 1st pass tool) potentially highlights firms that navigated through the pandemic exceptionally well. One can potentially glean best practices from highlighted firms, which include positive transformation include shifting to online sales, working from home, cash conservation, quickly adjust sales of products/services according to market conditions, bringing furloughed employees back.
 

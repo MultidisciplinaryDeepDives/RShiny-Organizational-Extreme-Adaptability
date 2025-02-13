@@ -80,16 +80,18 @@ function(input, output, session) {
     
     industry <- Closing_Share_Price_Across_Time_DropNA_highlight |> filter(company_name == input$Chosen_Firm) |> pull(Industry) |> unique()
     
+ 
     Closing_Share_Price_Across_Time_DropNA_highlight |> 
       filter(Industry == industry) |> 
       ggplot(aes(x = Covid_Net_Sentiment, y = Percent_Change_bt_DayBefore_y_DayAfter)) +
       geom_point(
         aes(size = Covid_Exposure*100, color = highlight), 
         alpha = 0.7, 
-        show.legend = FALSE
+        show.legend = TRUE
       ) +
       geom_smooth(method = "lm", formula = formula, se = TRUE) + 
-      scale_color_manual(values = c("turquoise", "red")) +
+      scale_color_manual(labels = c("Other Firms in the Industry", "Selected Firm"), 
+                         values = c("turquoise", "red")) +
       # scale_size_manual(values = c(1, 3)) +
       # geom_label_repel(data = Closing_Share_Price_Across_Time_DropNA_highlight |> filter(highlight == TRUE), aes(label = company_name)) +
       stat_poly_eq(
@@ -109,7 +111,10 @@ function(input, output, session) {
       labs(
         x = "Net COVID Sentiment",
         y = "% Change in Stock Price from the Day Before Earnings Call to the Day After",
-        title = title2
+        title = title2,
+        color = "Firm Selection",
+        size = "COVID Exposure Range: 0.06~13.35. 
+Size as described below = Exposure x 100"
       )  
     
   })

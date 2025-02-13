@@ -331,6 +331,23 @@ tibble(resid=resid(PercentChange_SharePrices_HierchicalIndustryCompany), date=Cl
   ylim(-25, 25)
 # stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n")), vstep=22, size=3.8) 
 ```
+```{r}
+cIndustry_Removal = function(lab) {
+  str_remove(lab, "c\\(Industry\\)")  
+}
+
+DayOfEarningsCall_Removal = function(lab) {
+  str_remove(lab, "Day_of_EarningsCall")  
+}
+
+```
+
+
+```{r}
+StatSig_Industries_Time_y_InteractionTermIndustryNetCOVIDSentiment <- StatSig_Industries_Time_y_InteractionTermIndustryNetCOVIDSentiment |> mutate(term = cIndustry_Removal(term)) |> mutate(term = DayOfEarningsCall_Removal(term))
+
+StatSig_Industries_Time_y_InteractionTermIndustryNetCOVIDSentiment
+```
 
 
 
@@ -350,32 +367,7 @@ BarGraph_StatSig_Industries
 ```
 
 
-```{r}
 
-Underscore_Removal = function(lab) {
-  str_replace(lab, "_", " ") |> str_to_title()
-}
-
-cIndustry_Removal = function(lab) {
-  str_remove(lab, "c(Industry)")  
-}
-
-DayOfEarningsCall_Removal = function(lab) {
-  str_remove(lab, "Day_of_EarningsCall")  
-}
-
-BarGraph_StatSig_Industries$term <- BarGraph_StatSig_Industries$term |>
-                                      map(Underscore_Removal)
-
-BarGraph_StatSig_Industries$term <- BarGraph_StatSig_Industries$term |> 
-                                      map(cIndustry_Removal) 
-
-BarGraph_StatSig_Industries$term <- BarGraph_StatSig_Industries$term |> 
-                                      map(DayOfEarningsCall_Removal)
-
-BarGraph_StatSig_Industries
-
-```
 
 ```{r}
 StatSig_IndustryNetCOVIDSentimentInteraction <- StatSig_Industries_Time_y_InteractionTermIndustryNetCOVIDSentiment |> filter(str_detect(term, ":Covid_Net_Sentiment"))
@@ -386,11 +378,20 @@ StatSig_IndustryNetCOVIDSentimentInteraction
 StatSig_Industries <- StatSig_Industries_Time_y_InteractionTermIndustryNetCOVIDSentiment |> filter(!str_detect(term, ":Covid_Net_Sentiment"))
 StatSig_Industries
 ``` 
+```{r}
+
+InteractionTermLabel_Removal = function(lab) {
+  str_remove(lab, ":Covid_Net_Sentiment")  
+}
+
+StatSig_IndustryNetCOVIDSentimentInteraction_TrimmedLabels <- StatSig_IndustryNetCOVIDSentimentInteraction |> mutate(term = InteractionTermLabel_Removal(term))
+
+```
 
 
 ```{r}
 
-BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction <- ggplot(data=StatSig_IndustryNetCOVIDSentimentInteraction, aes(x=reorder(term, estimate), y=estimate)) +
+BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction_TrimmedLabels <- ggplot(data=StatSig_IndustryNetCOVIDSentimentInteraction_TrimmedLabels, aes(x=reorder(term, estimate), y=estimate)) +
                                                           geom_bar(stat="identity", fill="steelblue") +
                                                           coord_flip() +
                                                           theme_minimal() +
@@ -398,23 +399,12 @@ BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction <- ggplot(data=StatSig_Ind
                                                           labs(y="% Change in Stock Price as A Function of Net COVID Sentiment") + 
                                                           labs(title="Industries Whose Stock Price Changes Disproportionally Correlate with Net COVID Sentiment", subtitle="Mixed-Effect Linear Regression Analysis of How Percentage Change in Share Price Correlates with Net COVID-Related Sentiment")
 
-BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction
+BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction_TrimmedLabels
 
 
 ```
 
-```{r}
 
-Str_Remove_Covid_Net_Sentiment = function(lab) {
-  str_remove(lab, ":Covid_Net_Sentiment")  
-}
-
-BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction$term <- BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction$term |>
-                                      map(Str_Remove_Covid_Net_Sentiment)
-
-BarGraph_StatSig_IndustryNetCOVIDSentimentInteraction
-
-```
 
 
 
