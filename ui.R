@@ -15,7 +15,7 @@ fluidPage(
   theme = shinytheme("readable"),
   
   tags$style(HTML("
-    .tabbable > .nav > li > a                  {background-color: lightcyan;  color:blue4}
+    .tabbable > .nav > li > a                  {background-color: seashell;  color:blue4}
     .tabbable > .nav > li[class=active]    > a {background-color: dodgerblue; color:white}
   ")),
   
