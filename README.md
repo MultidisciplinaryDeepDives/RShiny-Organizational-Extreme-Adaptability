@@ -32,7 +32,8 @@ Hence, this analysis / app can be (use with caution) a screening tool for invest
 
 Because this analysis is retrospective in nature, it of course has limitations in predicting the future. 
 
-Parenthetically, this analysis/app serves as a screening process (as a 1st pass tool) potentially highlights firms that navigated through the pandemic exceptionally well. One can potentially glean best practices from highlighted firms, which include positive transformation include shifting to online sales/transactions, working from home, conservation of cash, quickly adjusting prices & offerings of products/services according to market conditions, and bringing furloughed employees back.
+Parenthetically, this analysis/app serves as a screening process (as a 1st pass tool) potentially highlights firms that navigated through the pandemic exceptionally well. One can potentially glean best practices from highlighted firms. Steps of positive transformations include shifting to online sales/transactions, working from home, conservation of cash, quickly adjusting prices & offerings of products/services according to market conditions, and bringing furloughed employees back.
+
 
 
 

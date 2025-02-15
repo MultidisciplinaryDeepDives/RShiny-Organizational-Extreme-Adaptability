@@ -258,14 +258,30 @@ summary(PercentChange_SharePrices_HierchicalIndustryCompany)$coefficients
 
 ```{r}
 
-PercentChange_GeneralSentiment_SharePrices_HierchicalIndustryCompany <- glmer(
-  "Percent_Change_bt_DayBefore_y_DayAfter ~ -1 + Day_of_EarningsCall + c(Industry) + Covid_Net_Sentiment:c(Industry) + Sentiment:c(Industry) + (1 | company_name)", 
+PercentChange_NegCOVIDSentiment_SharePrices_HierchicalIndustryCompany <- glmer(
+  "Percent_Change_bt_DayBefore_y_DayAfter ~ -1 + Day_of_EarningsCall + c(Industry) + Covid_Neg_Sentiment:c(Industry) + (1 | company_name)", 
   data=Closing_Share_Price_Across_Time,
   family=gaussian) 
 
-summary(PercentChange_GeneralSentiment_SharePrices_HierchicalIndustryCompany)$coefficients  
+summary(PercentChange_NegCOVIDSentiment_SharePrices_HierchicalIndustryCompany)$coefficients  
 
 ``` 
+
+ 
+```{r}
+
+PercentChange_PosCOVIDSentiment_SharePrices_HierchicalIndustryCompany <- glmer(
+  "Percent_Change_bt_DayBefore_y_DayAfter ~ -1 + Day_of_EarningsCall + c(Industry) + Covid_Pos_Sentiment:c(Industry) + (1 | company_name)", 
+  data=Closing_Share_Price_Across_Time,
+  family=gaussian) 
+
+summary(PercentChange_PosCOVIDSentiment_SharePrices_HierchicalIndustryCompany)$coefficients  
+
+```  
+
+
+
+
 ```{r}
 
 saveRDS(PercentChange_SharePrices_HierchicalIndustryCompany, file="../data/MixedEffects_HierarchicalModel.RDS")
@@ -656,7 +672,7 @@ Closing_Share_Price_Across_Time_DropNA_highlight <- Closing_Share_Price_Across_T
 ```{r}
 
 Closing_Share_Price_Across_Time_DropNA_highlight |> 
-  filter(Industry==Industry[(Closing_Share_Price_Across_Time_DropNA_highlight$company_name=="Lovesac Co")]) |> 
+  filter(Industry==(Industry[(Closing_Share_Price_Across_Time_DropNA_highlight$company_name=="Lovesac Co")] |> unique())) |> 
   ggplot(aes(x=Day_of_EarningsCall, y=Percent_Change_bt_DayBefore_y_DayAfter)) +
   geom_point(aes(size=Covid_Net_Sentiment, color=highlight), alpha=0.7, show.legend=FALSE) +
   geom_smooth(method=lm, formula=y ~ x) + 
@@ -673,39 +689,17 @@ Closing_Share_Price_Across_Time_DropNA_highlight |>
 # vcov(PercentChange_SharePrices_HierchicalIndustryCompany)
 ```
 
-```{r} 
-
-PercentChange_SharePrices_HierchicalIndustryCompany <- lmer(Percent_Change_bt_DayBefore_y_DayAfter ~ Day_of_EarningsCall + Covid_Neg_Sentiment + c(Industry) + Covid_Neg_Sentiment:c(Industry) + (1 | company_name), data=Closing_Share_Price_Across_Time) 
-
-summary(PercentChange_SharePrices_HierchicalIndustryCompany)  
-
-```
-
-
-```{r} 
-
-PercentChange_SharePrices_HierchicalIndustryCompany <- lmer(Percent_Change_bt_DayBefore_y_DayAfter ~ Day_of_EarningsCall + Covid_Pos_Sentiment + c(Industry) + Covid_Pos_Sentiment:c(Industry) + (1 | company_name), data=Closing_Share_Price_Across_Time) 
-
-summary(PercentChange_SharePrices_HierchicalIndustryCompany)  
-
-```
 
 
 
-```{r}
-
-lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(Industry) + Day_of_EarningsCall + Covid_Exposure + Covid_Pos_Sentiment + Covid_Pos_Sentiment:c(Industry), data=Closing_Share_Price_Across_Time) |> 
-  summary()
-
-```
 
 
-```{r}
 
-lm(Percent_Change_bt_DayBefore_y_DayAfter ~ c(Industry) + Day_of_EarningsCall + Covid_Neg_Sentiment + Covid_Neg_Sentiment:c(Industry), data=Closing_Share_Price_Across_Time) |> 
-  summary()
 
-```
+
+
+
+
 
 
 
