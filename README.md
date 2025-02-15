@@ -1,4 +1,4 @@
-## Mixed Effect Regression Analysis: How Changes in Stock Price Correlate with COVID Sentiment in Earnings Calls --> Finding Pricing Inefficiencies + Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic
+## Mixed Effect Regression Analysis: How Changes in Stock Price Correlate with COVID Sentiment in Earnings Calls --> Organizational Radical/Extreme Adaptability During SARS-CoV-2 Pandemic + Finding Pricing Inefficiencies
 
 **Executive Summary**:
 
