@@ -7,6 +7,9 @@ We live in an interconnected world in which nothing exists in isolation or in a 
 The accompanying app can be accessed here:
 https://interdisciplinary-deep-dives.shinyapps.io/Organizational_Extreme_Adaptability/
 
+The accompanying PPT can be accessed here:
+https://drive.google.com/drive/folders/1uh7mNCtYDxehXgzvnn7Ev6TA0Rxsk0_2?usp=sharing 
+
 
 
 **Motivation / The "so what?" factor**:
