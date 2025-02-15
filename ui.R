@@ -15,10 +15,7 @@ fluidPage(
   theme = shinytheme("readable"),
   
   tags$style(HTML("
-    .tabbable > .nav > li > a                  {background-color: azure;  color:royalblue4}
-    .tabbable > .nav > li > a[data-value='Distribution of Correlations Across an Industry'] {background-color: red;   color:white}
-    .tabbable > .nav > li > a[data-value='Correlation of Stock Price Changes with Net COVID Sentiment'] {background-color: blue;  color:white}
-    .tabbable > .nav > li > a[data-value='COVID Net Sentiment & Stock Price Changes over Time'] {background-color: green; color:white}
+    .tabbable > .nav > li > a                  {background-color: lightcyan;  color:blue4}
     .tabbable > .nav > li[class=active]    > a {background-color: dodgerblue; color:white}
   ")),
   
@@ -65,7 +62,7 @@ fluidPage(
                    dataTableOutput("selecteddataTable")
                  )
         ),
-        tabPanel(h4('Correlation of Stock Price Changes with Net COVID Sentiment'),  
+        tabPanel(h4('Correlation: Net COVID Sentiment & Stock Price Changes'),  
                  fluidRow(
                    column( 
                      width = 12, 
@@ -74,7 +71,7 @@ fluidPage(
                    )
                  )
         ),
-        tabPanel(h4('COVID Net Sentiment & Stock Price Changes over Time'),  
+        tabPanel(h4('Net COVID Sentiment & Stock Price Changes over Time'),  
                  fluidRow(
                    column( 
                      width = 12, 
