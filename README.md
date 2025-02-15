@@ -9,7 +9,7 @@ https://interdisciplinary-deep-dives.shinyapps.io/Organizational_Extreme_Adaptab
 
 
 
-**Motivation**:
+**Motivation / The "so what?" factor**:
 
 The purpose of this project is twofold: 
 (1) examine how markets react to earnings calls,
@@ -33,12 +33,12 @@ Parenthetically, this analysis/app serves as a screening process (as a 1st pass 
 
 
 
-
 **Data Questions**:
 1)	Find US firms' stock prices on the day before/after each earnings call. Then find the correlation between Net COVID Sentiment and stock price.
 2)	Hopefully we will discover insights pertaining to: 
   a)	How do these firms journeys of recovery/overcoming compare to the average in one’s industry?
   b)	Were there real changes / resilience related actions inside of those firms? Or was it merely a change in PR/diplomacy?
+
 
 **References**:
 1) Harvard Business Review IdeaCast: “Why Some Companies Thrived During the Pandemic” https://podcasts.apple.com/us/podcast/hbr-ideacast/id152022135?i=1000551887123 
