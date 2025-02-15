@@ -14,15 +14,24 @@ library(shinythemes)
 fluidPage(
   theme = shinytheme("readable"),
   
+  tags$style(HTML("
+    .tabbable > .nav > li > a                  {background-color: azure;  color:royalblue4}
+    .tabbable > .nav > li > a[data-value='Distribution of Correlations Across an Industry'] {background-color: red;   color:white}
+    .tabbable > .nav > li > a[data-value='Correlation of Stock Price Changes with Net COVID Sentiment'] {background-color: blue;  color:white}
+    .tabbable > .nav > li > a[data-value='COVID Net Sentiment & Stock Price Changes over Time'] {background-color: green; color:white}
+    .tabbable > .nav > li[class=active]    > a {background-color: dodgerblue; color:white}
+  ")),
+  
   # Application title
-  titlePanel("US Firms' Stock Performance During SARS-CoV-2 Pandemic: How Changes in Stock Prices Correlate with Net COVID Sentiment in Earnings Calls"),
+  titlePanel("US Firms' Stock Performance During SARS-CoV-2 Pandemic: 
+  How Changes in Stock Prices Correlate with Net COVID Sentiment in Earnings Calls"),
   
   # Drop down menu to select an industry of interest
   sidebarLayout(
     sidebarPanel(
       selectInput(
         "Industry", 
-        label = h4("Select an Industry"),  # h3 is level 3 header
+        label = "Select an Industry",  # h3 is level 3 header
         choices = c("All", Company_Industry |> distinct(Industry) |>  pull() |> sort()), 
         selected = 1
       ),
@@ -44,7 +53,7 @@ fluidPage(
     # Main Panel's top portion has bar graph; bottom portion has table
     mainPanel(
       tabsetPanel(
-        tabPanel(h3('Distribution of Correlations Across an Industry'), 
+        tabPanel(h4('Distribution of Correlations Across an Industry'), 
                  fluidRow(
                    column( 
                      width = 12, 
@@ -56,7 +65,7 @@ fluidPage(
                    dataTableOutput("selecteddataTable")
                  )
         ),
-        tabPanel(h3('Correlation of Stock Price Changes with Net COVID Sentiment'),  
+        tabPanel(h4('Correlation of Stock Price Changes with Net COVID Sentiment'),  
                  fluidRow(
                    column( 
                      width = 12, 
@@ -65,7 +74,7 @@ fluidPage(
                    )
                  )
         ),
-        tabPanel(h3('COVID Net Sentiment & Stock Price Changes over Time'),  
+        tabPanel(h4('COVID Net Sentiment & Stock Price Changes over Time'),  
                  fluidRow(
                    column( 
                      width = 12, 
